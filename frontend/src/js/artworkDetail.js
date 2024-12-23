@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             commentP.textContent = 'Comments: ';
             comments.forEach(comment => {
                 const commentElement = document.createElement('li');
-                commentElement.textContent = comment.content;
+                commentElement.textContent = comment.userId + ": " + comment.content;
                 commentList.appendChild(commentElement);
             });
         } else {

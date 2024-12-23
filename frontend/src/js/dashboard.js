@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             fetchArtworks(user.role); // Fetch artworks only if user
             document.getElementById('usersH2').textContent = 'Edit profile';
             const profileBtn = document.createElement('button');
+            profileBtn.classList.add('profileBtn');
             profileBtn.textContent = 'Edit';
             profileBtn.style.cursor = 'pointer';
             profileBtn.addEventListener('click', () => {
@@ -142,7 +143,7 @@ async function fetchArtworks(role) {
             if (role === 'ADMIN') {
                 let deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete artwork';
-                deleteButton.classList.add('deleteButton');
+                deleteButton.classList.add('deleteButton', 'deleteArtworkButton');
                 deleteButton.addEventListener('click', () => {
                     deleteArtwork(artwork.id);
                 });
@@ -198,7 +199,7 @@ async function fetchUsers() {
                     deleteUser(fetchedUser.id);
                 });
                 deleteButton.textContent = 'Delete user';
-                deleteButton.classList.add('deleteButton');
+                deleteButton.classList.add('deleteButton', 'deleteUserButton');
                 userDiv.appendChild(deleteButton);
             }
             usersContainer.appendChild(userDiv);
