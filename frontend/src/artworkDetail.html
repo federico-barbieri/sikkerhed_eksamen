@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./js/artworkDetail.js" defer></script>
+    <link rel="stylesheet" href="./css/artworkDetail.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artwork Detail</title>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul id="nav-links">
+                <li><a href="http://127.0.0.1:5500/frontend/src/index.html"><strong>ARTWORLD</strong></a></li>
+                <li><a href="#"><strong>Documentation</strong></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+        <article>
+            <img id="artwork-image" src="" alt="Artwork image">
+            <h1 id="artwork-title"></h1>
+            <h2 id="artwork-artist"></h2>
+            <p id="artwork-technique"></p>
+            <p id="artwork-production_date"></p>
+        </article>
+
+        <article id="comments">
+            <h2>Comments</h2>
+            <p id="commentP">There are no comments for this artwork.</p>
+            <ul id="comments-list">
+                
+            </ul>
+            <form method="POST" id="commentForm">
+                <div>
+                    <label for="comment">Comment</label>
+                    <textarea id="comment" name="comment" placeholder="Write your comment here" required></textarea>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+
+        </article>
+
+    </main>
+    
+</body>
+</html>

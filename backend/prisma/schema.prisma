@@ -10,17 +10,19 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+ // url      = env("DATABASE_URL")
+  url = "postgresql://sikkerhed_momentary_db_user:NlY3C08F4yp72tLaNp0TIUhv3VzQDDjU@dpg-ctjd95dsvqrc73881isg-a.frankfurt-postgres.render.com/sikkerhed_momentary_db"
 }
 
 model User {
-  id       String           @id @default(uuid())
-  username String           @unique
-  email     String          @unique
-  password  String
-  role      UserRole        @default(USER)
-  createdAt DateTime        @default(now())
-  profilePicture String     @default("/assets/images/default_profile.jpg")
+  id             String    @id @default(uuid())
+  username       String    @unique
+  email          String    @unique
+  password       String
+  role           UserRole  @default(USER)
+  createdAt      DateTime  @default(now())
+  profilePicture String    @default("/assets/images/default_profile.jpg")
+  Comment        Comment[]
 }
 
 enum UserRole {
@@ -29,10 +31,23 @@ enum UserRole {
 }
 
 model Artwork {
-  id                String @id 
-  artist            String
-  title             String
-  image             String
-  technique         String
-  production_date   String
+  id              String    @id
+  artist          String
+  title           String
+  image           String
+  technique       String
+  production_date String
+  Comment         Comment[]
+}
+
+model Comment {
+  id        String   @id  @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  artwork   Artwork  @relation(fields: [artworkId], references: [id])
+  artworkId String
+
+  @@unique([userId, artworkId])
 }

@@ -20,6 +20,34 @@
     --error-message: red;
 }
 
+#nav-links{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 10vh;
+    background-color: var(--header-background);
+    font-family: var(--primary-font);
+}
+
+#nav-links a{
+    text-decoration: none;
+    color: inherit;
+}
+
+#nav-links a:hover{
+    color: var(--primary-accent);
+}
+
+#nav-links li{
+    list-style-type: none;
+}
+
+.logout{
+    color: var(--error-message);
+}
+
 body{
     background-color: var(--primary-background);
     color: var(--text-color);

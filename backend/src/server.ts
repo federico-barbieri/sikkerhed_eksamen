@@ -10,6 +10,12 @@ import {artworksAreFetchedFromDB} from "./handlers/art"
 import cookieParser from 'cookie-parser';
 import helmet from "helmet";
 import multer from "multer";
+import { Prisma } from '@prisma/client';
+
+
+interface CommentRequestBody {
+  comment: string;
+}
 
 
 import {fetchArt} from "../prisma/seed";
@@ -108,6 +114,37 @@ app.post('/api/logout', logout)
 // this fetches the artworks from the db to show them in the dashboard if the user is just a user
 app.get('/api/artworks', artworksAreFetchedFromDB);
 
+// fetch one artwork based on its id provided by the frontend
+app.get('/api/artwork/:id', protect, async (req: request, res: response) => {
+  const id = decodeURIComponent(req.params.id);
+
+  try {
+    const artwork = await prisma.artwork.findUnique({
+      where: { id: id },
+    });
+    if (!artwork) {
+      return res.status(404).json({ message: 'Artwork not found' })
+    }
+
+    // check if artwork has comments and include them in the response
+    const comments = await prisma.comment.findMany({
+      where: { artworkId: id },
+      include: { user: true },
+    });
+
+    // if comments.length > 0, include them in the response
+    if (comments.length > 0) {
+      res.json({artwork, comments}); 
+    } else {
+      res.json({artwork});
+    }  
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching artwork' });
+  }
+
+  // 
+});
+
 // check user role when accessing the dashboard
 app.get('/api/dashboard', protect, (req, res) => {
   const { id, username, role, profilePicture } = req.user;
@@ -150,6 +187,44 @@ app.delete('/api/admin/artworks/:id', protect, adminOnly, async (req, res) => {
     res.status(500).json({ message: 'Error deleting artwork' });
   }
 });
+
+app.post('/api/artwork/:id/comment', protect, async (req: request, res: response) => {
+  const { id: artworkId } = req.params;
+  const { comment: content } = req.body;
+  const { userId } = req.user;
+
+  try {
+    // Validate inputs
+    if (!artworkId || !content || !userId) {
+      return res.status(400).json({ message: 'Artwork ID, user ID, and comment content are required' });
+    }
+
+    // Create the comment
+    const newComment = await prisma.comment.create({
+      data: {
+        content,
+        user: {
+          connect: { id: userId }, // Link to existing User
+        },
+        artwork: {
+          connect: { id: artworkId }, // Link to existing Artwork
+        },
+      },
+      include: {
+        user: true,
+        artwork: true,
+      },
+    });
+
+    // Respond with the created comment
+    res.status(201).json(newComment);
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    res.status(500).json({ message: 'Error posting comment' });
+  }
+});
+
+
 
 // Route to check user session
 app.get('/api/usersession', protect, (req, res) => {

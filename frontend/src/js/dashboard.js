@@ -121,6 +121,16 @@ async function fetchArtworks(role) {
             artworkElement.classList.add('artworkLi');
             const artworkImage = document.createElement('img');
             artworkImage.src = artwork.image;
+            artworkImage.style.cursor = 'pointer';
+
+            // create an event listener to redirect to the specific artwork detail page
+            artworkImage.addEventListener('click', function () {
+                const artworkId = artwork.id; // Get artwork ID
+                const encodedArtworkId = encodeURIComponent(artworkId);
+                // Redirect to the details page with the ID as a query parameter
+                window.location.href = `artworkDetail.html?id=${encodedArtworkId}`;
+              });
+
             const artworkTitle = document.createElement('h3');
             artworkTitle.textContent = `${artwork.title}`;
             const artworkTechnique = document.createElement('p');
