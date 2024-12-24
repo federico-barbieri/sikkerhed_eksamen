@@ -237,7 +237,7 @@ nav {
 }
 
 .deleteArtworkButton {
-    background-color: var(--button-background);
+    background-color: var(--error-message);
     color: var(--button-text);
     border: none;
     border-radius: 5px;
@@ -247,7 +247,7 @@ nav {
 }
 
 .deleteArtworkButton:hover {
-    background-color: var(--button-hover);
+    background-color: var(--error-message);
 }
 
 .profileBtn {

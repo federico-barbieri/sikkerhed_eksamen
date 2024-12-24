@@ -11,6 +11,8 @@ import cookieParser from 'cookie-parser';
 import helmet from "helmet";
 import multer from "multer";
 import { Prisma } from '@prisma/client';
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "../swaggerConfig";
 
 
 interface CommentRequestBody {
@@ -22,6 +24,9 @@ import {fetchArt} from "../prisma/seed";
 
 
 const app = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // Serve static files from the frontend/assets/images directory
 app.use('/assets/images', express.static(path.join(__dirname, '../../frontend/assets/images')));
@@ -88,11 +93,51 @@ const upload = multer({ storage });
 // we are currently only using these routes below
 
 // this seeds the db with artwork (we should add an admin and stop seeding every time we start the server)
-
+/**
+ * @swagger
+ * /api:
+ *   get:
+ *     summary: Fetches the artworks.
+ *     responses:
+ *       500:
+ *         description: Error response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Failed to fetch artwork
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 artist:
+ *                   type: string
+ *                 image:
+ *                   type: string
+ *                 technique:
+ *                   type: string
+ *                 production_date:
+ *                   type: string
+ *                 Comment:
+ *                   type: array
+ * 
+ */
 app.get('/api', async (req: request, res: response) => {
   try {
     const artworks = await fetchArt();
-    res.json(artworks);
+    // send a 200 ok status code and the artworks to the frontend
+    res.status(200).json(artworks);
   } catch (error) {
     console.error("Error fetching artwork:", error);
     res.status(500).json({ error: "Failed to fetch artwork" });
@@ -131,6 +176,8 @@ app.get('/api/artwork/:id', protect, async (req: request, res: response) => {
       where: { artworkId: id },
       include: { user: true },
     });
+
+    
 
     // if comments.length > 0, include them in the response
     if (comments.length > 0) {
