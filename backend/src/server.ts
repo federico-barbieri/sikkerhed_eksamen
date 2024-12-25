@@ -25,9 +25,6 @@ import {fetchArt} from "../prisma/seed";
 
 const app = express();
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-
 // Serve static files from the frontend/assets/images directory
 app.use('/assets/images', express.static(path.join(__dirname, '../../frontend/assets/images')));
 
@@ -76,6 +73,7 @@ app.use(express.urlencoded({extended: true}))
 // makes cookie an object innstead of a string to be split
 app.use(cookieParser());
 
+app.use('/api-docs', protect, adminOnly, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
