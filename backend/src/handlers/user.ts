@@ -5,27 +5,6 @@ import sanitizeInput from "../utils/sanitize_input"
 import bcrypt from "bcrypt"
 
 
-
-export const createNewUser = async (req: request, res: response) => {
-
-    // add code to check if user already exists
-
-    // add code to do backend validation
-
-    // create user    
-    const user = await prisma.user.create({
-        data: {
-            username: req.body.username,
-            email: req.body.email,
-            password: await hashPassword(req.body.password)
-
-        }
-    })
-    const token = createJWT(user)
-    res.json({token: token})
-}
-
-
 export const login = async (req: request, res: response) => {
     const { email, password } = req.body;
   
@@ -81,6 +60,11 @@ export const login = async (req: request, res: response) => {
 export const checkEmailExists = async (req: request, res: response, next) => {
     const email = req.body.email;
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            return res.status(400).json({ message: "Invalid email format" });
+        }
+
     try {
         const user = await prisma.user.findUnique({
             where: { email: email }
@@ -103,6 +87,18 @@ export const checkEmailExists = async (req: request, res: response, next) => {
 // check if email is already in database
 
 export const storeUserInDatabase = async (req: request, res: response, next) => {
+  const { username, email, password } = req.body;
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            return res.status(400).json({ message: "Invalid email format" });            
+        }
+  
+  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_]).{8,}$/;
+  if (!passwordPattern.test(password)) {
+      return res.status(400).json({ message: "Password must be at least 8 characters long, include uppercase, lowercase, digit, and special character" });
+  }
+
     try {
         const storeNewUser = await prisma.user.create({
             data: {
@@ -127,6 +123,7 @@ export const storeUserInDatabase = async (req: request, res: response, next) => 
 // logout
 // logout
 
+
 export const logout = async (req: request, res: response) => {
   try {
     // Clear the token cookie
@@ -137,7 +134,7 @@ export const logout = async (req: request, res: response) => {
       path: '/', // Ensure this matches how the cookie was set
     });
     // Return a success message
-    res.json({ message: "Logged out successfully" });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error during logout:", error);
     res.status(500).json({ error: "Failed to log out. Please try again." });
