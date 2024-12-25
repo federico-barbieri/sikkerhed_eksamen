@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Dynamically update the navigation links
-        updateNavLinks();
+        updateNavLinks(user.role);
 
     } catch (error) {
         console.error('Error fetching user:', error);
@@ -73,7 +73,7 @@ async function logout() {
 }
 
 // Dynamically update the navigation links
-function updateNavLinks() {
+function updateNavLinks(role) {
     const navLinks = document.getElementById('nav-links');
 
     // Create a new <li> for Logout
@@ -88,6 +88,22 @@ function updateNavLinks() {
     });
 
     logoutLi.appendChild(logoutLink);
+
+    // do the same but for "documentation", only if the user is an admin
+    if (role === 'ADMIN') {
+        const documentationLi = document.createElement('li');
+        const documentationLink = document.createElement('a');
+        documentationLink.href = "http://localhost:3002/api-docs";
+        documentationLink.textContent = "Documentation";
+        documentationLi.classList.add('documentation');
+        // Add rel="noopener noreferrer" to external anchor tags (links)
+        documentationLink.rel = 'noopener noreferrer';
+        // add _blank
+        documentationLink.target = '_blank';
+        documentationLi.appendChild(documentationLink);
+        navLinks.appendChild(documentationLi);
+    }
+
 
     // Append the Logout link to the nav list if not already present
     if (!document.querySelector('#nav-links a[href="#logout"]')) {

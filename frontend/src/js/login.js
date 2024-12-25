@@ -83,10 +83,10 @@ function updateNavLinks() {
     logoutLi.appendChild(logoutLink);
 
     // Append the Logout link to the nav list if not already present
-    if (!document.querySelector('#nav-links a[href="#logout"]')) {
-        logoutLink.id = 'logout';
-        navLinks.appendChild(logoutLi);
-    }
+   // if (!document.querySelector('#nav-links a[href="#logout"]')) {
+   //     logoutLink.id = 'logout';
+   //     navLinks.appendChild(logoutLi);
+   // }
 }
 
 // Function to log out the user
