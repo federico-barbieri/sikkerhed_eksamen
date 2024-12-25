@@ -208,16 +208,6 @@ nav {
     margin-bottom: 0.5rem;
 }
 
-.artworkLi button {
-    background-color: var(--button-background);
-    color: var(--button-text);
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
 .artworkLi button:hover {
     background-color: var(--button-hover);
 }
@@ -247,7 +237,7 @@ nav {
 }
 
 .deleteArtworkButton:hover {
-    background-color: var(--error-message);
+    background-color: darkred;
 }
 
 .profileBtn {

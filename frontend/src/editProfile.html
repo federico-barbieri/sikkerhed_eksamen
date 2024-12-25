@@ -13,7 +13,6 @@
         <nav>
             <ul id="nav-links">
                 <li><a href="http://127.0.0.1:5500/frontend/src/index.html"><strong>ARTWORLD</strong></a></li>
-                <li><a href="#"><strong>Documentation</strong></a></li>
             </ul>
         </nav>
     </header>
@@ -27,19 +26,19 @@
 
             <div id="edit-profile-form-div">
                 <form id="edit-profile-form" enctype="multipart/form-data">
-                    <label for="profilePicture">Profile picture:</label>
+                    <label for="profilePicture">Profile picture:<span class="required">*</span></label>
                     <input type="file" id="profilePicture" name="profilePicture" required><br><br>
 
-                    <label for="username">Username:</label>
+                    <label for="username">Username:<span class="required">*</span></label>
                     <input type="text" id="username" name="username" required><br><br>
 
                     <label for="email">Email:</label>
                     <input disabled type="email" id="email" name="email"><br><br>
 
-                    <label for="password">Password:</label>
+                    <label for="password">Password:<span class="required">*</span></label>
                     <input type="password" id="password" name="password" placeholder="********" required><br><br>
                     
-                    <label for="confirm-password">Confirm password:</label>
+                    <label for="confirm-password">Confirm password:<span class="required">*</span></label>
                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="********" required><br><br>
                     
                     <button id="submit-button" type="submit">Save changes</button>
